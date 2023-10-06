@@ -2,7 +2,7 @@ from const import *
 from square import Square
 from piece import *
 from move import Move
-
+import os
 
 class Board:
 
@@ -37,7 +37,7 @@ class Board:
                 if Square.in_range(possible_move_row, possible_mov_col):
                     if self.squares[possible_move_row][possible_mov_col].isempty_or_rival(piece.color):
                         # create Square of the new move
-                        initial =   Square(row, col)
+                        initial = Square(row, col)
                         final = Square(possible_move_row,possible_mov_col) 
                         # create new move
                         move = Move(initial, final)
@@ -48,15 +48,15 @@ class Board:
 
         if isinstance(piece, Pawn):
             pass
-        if isinstance(piece, Knight):
+        elif isinstance(piece, Knight):
+            knight_moves()
+        elif isinstance(piece, Bishop):
             pass
-        if isinstance(piece, Bishop):
+        elif isinstance(piece, Rook):
             pass
-        if isinstance(piece, Rook):
+        elif isinstance(piece, Queen):
             pass
-        if isinstance(piece, Queen):
-            pass
-        if isinstance(piece, King):
+        elif isinstance(piece, King):
             pass
 
     def _create(self):

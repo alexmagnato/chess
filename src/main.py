@@ -4,6 +4,8 @@ import sys
 from const import *
 from game import Game
 from dragger import Dragger
+from move import Move
+from square import Square
 
 
 class Main:
@@ -19,12 +21,14 @@ class Main:
 
         screen = self.screen
         game = self.game
-        dragger = self.game.dragger
         board = self.game.board
-        
+        dragger = self.game.dragger
+
         while True:
-            self.game.show_bg(self.screen)
-            self.game.show_pieces(screen)
+            #show methods
+            game.show_bg(screen)
+            game.show_moves(screen)
+            game.show_pieces(screen)
 
             if dragger.dragging:
                 dragger.update_blit(screen)
@@ -41,14 +45,24 @@ class Main:
                     #if clicker square has piece ?
                     if board.squares[clicked_row][clicked_col].has_piece():
                         piece = board.squares[clicked_row][clicked_col].piece
+                        board.calc_moves(piece,clicked_row, clicked_col)
                         dragger.save_initial(event.pos)
                         dragger.drag_piece(piece)
+                        #show methods
+                        game.show_bg(screen)
+                        game.show_moves(screen)
+                        game.show_pieces(screen)
+                         
 
 
                 #Mouse motion
                 elif event.type == pygame.MOUSEMOTION:
                     if dragger.dragging:
                         dragger.update_mouse(event.pos)
+                        #show methods
+                        game.show_bg(screen)
+                        game.show_moves(screen)
+                        game.show_pieces(screen)
                         dragger.update_blit(screen)
                         
 
