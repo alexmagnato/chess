@@ -3,11 +3,13 @@ import pygame
 from const import *
 from board import Board
 from dragger import Dragger
+from square import Square
 
 class Game:
 
     def __init__(self):
         self.board = Board()
+        self.dragger = Dragger()
 
     # Show method
 
@@ -24,14 +26,17 @@ class Game:
                 pygame.draw.rect(surface, color, rect)
 
     
-    def show_pieces(self,surface):
+    def show_pieces(self, surface):
         for row in range(ROWS):
             for col in range(COLS):
-                #pieces ?
+                # piece ?
                 if self.board.squares[row][col].has_piece():
                     piece = self.board.squares[row][col].piece
-
-                    img = pygame.image.load(piece.texture)
-                    img_center = col * SQSIZE + SQSIZE // 2, row * SQSIZE + SQSIZE // 2
-                    piece.texture_rect = img.get_rect(center=img_center)
-                    surface.blit(img, piece.texture_rect)
+                    
+                    # all pieces except dragger piece
+                    if piece is not self.dragger.piece:
+                        piece.set_texture(size=80)
+                        img = pygame.image.load(piece.texture)
+                        img_center = col * SQSIZE + SQSIZE // 2, row * SQSIZE + SQSIZE // 2
+                        piece.texture_rect = img.get_rect(center=img_center)
+                        surface.blit(img, piece.texture_rect)
