@@ -18,6 +18,32 @@ class Board:
         #Calculates all the valid moves
         #
 
+        def pawn_moves():
+            # steps
+            steps = 1 if piece.moved else 2
+
+            # vertical moves
+            start = row + piece.dir
+            end = row + (piece.dir * (1 + steps))
+            for move_row in range(start,end, piece.dir):
+                if Square.in_range(move_row):
+                    if self.squares[move_row][col].isempty():
+                        #create initial and final move square
+                        initial = Square(row, col)
+                        final = Square(move_row, col)
+                        # create a new move
+                        move = Move(initial,final)
+                        piece.add_move(move)
+                    # blocked
+                    else: break
+                # not in range
+                else: break
+                        
+
+            # diagonal moves
+
+           
+
         def knight_moves():
             # 8 possible moves
             possible_moves = [
@@ -46,18 +72,12 @@ class Board:
 
 
 
-        if isinstance(piece, Pawn):
-            pass
-        elif isinstance(piece, Knight):
-            knight_moves()
-        elif isinstance(piece, Bishop):
-            pass
-        elif isinstance(piece, Rook):
-            pass
-        elif isinstance(piece, Queen):
-            pass
-        elif isinstance(piece, King):
-            pass
+        if isinstance(piece, Pawn): pawn_moves()
+        elif isinstance(piece, Knight): knight_moves()        
+        elif isinstance(piece, Bishop): pass
+        elif isinstance(piece, Rook): pass
+        elif isinstance(piece, Queen): pass
+        elif isinstance(piece, King): pass
 
     def _create(self):
         for row in range(ROWS):
@@ -74,7 +94,6 @@ class Board:
         #Knight
         self.squares[row_other][1] = Square(row_other, 1, Knight(color))
         self.squares[row_other][6] = Square(row_other, 6, Knight(color))
-
 
         #Bishop
         self.squares[row_other][2] = Square(row_other, 2, Bishop(color))
