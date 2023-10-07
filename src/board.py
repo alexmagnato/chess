@@ -88,25 +88,37 @@ class Board:
                 possible_move_row = row + row_incr
                 possible_move_col = col + col_incr
 
-                #while True
-                if Square.in_range(possible_move_row, possible_move_col):
-                    
-                    # create square of the possible new move
-                    initial = Square (row, col)
-                    final = Square (possible_move_row, possible_move_col)
-                    # create a possible new move
-                    move = Move(initial, final)
+                while True:
+                    if Square.in_range(possible_move_row, possible_move_col):
+                        
+                        # create square of the possible new move
+                        initial = Square (row, col)
+                        final = Square (possible_move_row, possible_move_col)
+                        # create a possible new move
+                        move = Move(initial, final)
 
 
-                    # empty squares
-                    if self.squares[possible_move_row][possible_move_col].isempty():
-                        # append new move
-                        piece.add_move(move)
+                        # empty squares
+                        if self.squares[possible_move_row][possible_move_col].isempty():
+                            # append new move
+                            piece.add_move(move)
 
-                    # has find an enemy piece
-                    if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
-                        # append new move
-                        piece.add_move(move)
+                        # has find an enemy piece
+                        if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
+                            # append new move
+                            piece.add_move(move)
+                            break
+
+                        # has find an ally piece
+                        if self.squares[possible_move_row][possible_move_col].has_team_piece(piece.color):
+                            break
+
+                    # not in range
+                    else: break
+
+                    # incrementing incrs 
+                    possible_move_row = possible_move_row + row_incr
+                    possible_move_col = possible_move_col + col_incr
 
         if isinstance(piece, Pawn): 
             pawn_moves()
@@ -148,8 +160,8 @@ class Board:
         row_pawn, row_other = (6, 7) if color == 'white' else (1,0)
 
         #Pawn
-        #for col in range(COLS):
-         #   self.squares[row_pawn][col] = Square(row_pawn, col, Pawn(color))
+        for col in range(COLS):
+           self.squares[row_pawn][col] = Square(row_pawn, col, Pawn(color))
         self.squares[5][1] = Square(5, 1, Pawn(color))
         #Knight
         self.squares[row_other][1] = Square(row_other, 1, Knight(color))
@@ -158,6 +170,7 @@ class Board:
         #Bishop
         self.squares[row_other][2] = Square(row_other, 2, Bishop(color))
         self.squares[row_other][5] = Square(row_other, 5, Bishop(color))
+        self.squares[3][5] = Square(3, 5, Bishop('white'))
 
 
         #Rook
