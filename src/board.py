@@ -70,13 +70,13 @@ class Board:
             ]
 
             for possible_move in possible_moves:
-                possible_move_row, possible_mov_col = possible_move
+                possible_move_row, possible_move_col = possible_move
                 
-                if Square.in_range(possible_move_row, possible_mov_col):
-                    if self.squares[possible_move_row][possible_mov_col].isempty_or_enemy(piece.color):
+                if Square.in_range(possible_move_row, possible_move_col):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_enemy(piece.color):
                         # create Square of the new move
                         initial = Square(row, col)
-                        final = Square(possible_move_row,possible_mov_col) 
+                        final = Square(possible_move_row,possible_move_col) 
                         # create new move
                         move = Move(initial, final)
                         # append new valid move 
@@ -120,6 +120,31 @@ class Board:
                     possible_move_row = possible_move_row + row_incr
                     possible_move_col = possible_move_col + col_incr
 
+        def king_moves():
+            adjs = [
+                (row-1, col+1), # up-right
+                (row-1, col+0), # up
+                (row-1, col-1), # up-left
+                (row+0, col+1), # right
+                (row+0, col-1), # left
+                (row+1, col+1), # down-rigt
+                (row+1, col+0), # down
+                (row+1, col-1), # down-left
+            ]
+
+            for possible_move in adjs:
+                possible_move_row, possible_move_col = possible_move
+
+                if Square.in_range(possible_move_row, possible_move_col):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_enemy(piece.color):
+                        # create Square of the new move
+                        initial = Square(row, col)
+                        final = Square(possible_move_row,possible_move_col) 
+                        # create new move
+                        move = Move(initial, final)
+                        # append new valid move 
+                        piece.add_move(move)
+
         if isinstance(piece, Pawn): 
             pawn_moves()
         elif isinstance(piece, Knight): 
@@ -149,7 +174,8 @@ class Board:
                 (1, 0), # down
                 (0, -1) # left
             ])
-        elif isinstance(piece, King): pass
+        elif isinstance(piece, King): 
+            king_moves()
 
     def _create(self):
         for row in range(ROWS):
@@ -176,11 +202,14 @@ class Board:
         #Rook
         self.squares[row_other][0] = Square(row_other, 0, Rook(color))
         self.squares[row_other][7] = Square(row_other, 7, Rook(color))
+        self.squares[4][4] = Square(4, 4, Rook(color))
 
 
         #Queen
         self.squares[row_other][3] = Square(row_other, 1, Queen(color))
+        self.squares[5][4] = Square(row_other, 1, Queen(color))
 
 
         #King
         self.squares[row_other][4] = Square(row_other, 1, King(color))
+        self.squares[5][3] = Square(5, 3, King(color))
